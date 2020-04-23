@@ -8,7 +8,7 @@ set -o pipefail # catch errors thrown in commands piped to this one
 
 DEFAULT_ICON_COLOR="#000000" # used for any workspace without settings['peacock.color']
 
-function dockify() {
+function dockspace() {
   local sourceDir="${1}"
   local iconSvgPath="${2}"
   local outputDir="${3}"
@@ -87,8 +87,8 @@ function dockify() {
 
 # let people load this tool by sourcing it or including it in PATH
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
-  export -f dockify
+  export -f dockspace
 else
-  dockify "${@}"
+  dockspace "${@}"
   exit ${?}
 fi
