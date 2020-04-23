@@ -4,4 +4,4 @@
 node_modules
 # test assets
 icon.svg
-test.vscw
+test.code-workspace
