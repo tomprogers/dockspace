@@ -21,7 +21,7 @@ function dockify() {
   local vscw="" # path to workspace file
   for vscw in $(find "${sourceDir}" -iname "*.code-workspace")
   do
-    echo "examining ${vscw}..."
+    echo "processing ${vscw}"
     local projectName="$(basename "${vscw}" .code-workspace)" # will hold the basename of each workspace file (without extension)
 
 
@@ -31,7 +31,6 @@ function dockify() {
       color="${DEFAULT_ICON_COLOR}"
     fi
 
-    echo "> color=${color}"
 
     # step 2: generate custom SVG from template, inserting with correct color
     local newSvg="" # will hold newly-written SVG code
@@ -47,6 +46,7 @@ function dockify() {
     local mySvgPath="${TMPDIR}${projectName}.svg"
     echo "${newSvg}" > "${mySvgPath}"
 
+
     # step 3: use the svg as the icon for the code-workspace file
 
     # convert svg to png
@@ -54,7 +54,7 @@ function dockify() {
     rsvg-convert -w 512 ${mySvgPath} > ${myPngPath}
 
     # make the image its own icon
-    sips -i ${myPngPath}
+    sips -i ${myPngPath} 1>/dev/null
 
     # extract icon as resource file
     local myRsrcPath="${TMPDIR}${projectName}.rsrc"
@@ -65,6 +65,7 @@ function dockify() {
 
     # set icon
     SetFile -a C ${vscw}
+
 
     # step 4: create symlink to workspace file in output directory
     local projectNameLowercase="$(echo "${projectName}" | tr '[:upper:]' '[:lower:]')"
