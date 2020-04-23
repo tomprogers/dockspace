@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "NODE_ENV=development nodemon -w src -e sh --exec yarn doit",
-    "doit": "dockify /Users/tom/projects/dock-code /Users/tom/projects/dock-code/test.vscw /Users/tom/projects/.projects"
+    "doit": "dockify /Users/tom/projects/dock-code /Users/tom/projects/dock-code/icon.svg /Users/tom/projects/dock-code/test.code-workspace /Users/tom/projects/.projects"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"
