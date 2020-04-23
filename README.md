@@ -11,11 +11,14 @@ $ dockspace workspaces_directory svg_icon shortcuts_directory
 1. Download the `dockspace.sh` script from this repo, and mark it executable.
 
 ```sh
-# download & rename from "dockspace.sh" to "dockspace"
-$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/tomprogers/dockspace/master/src/shell.sh > ~/scripts/dockspace)"
+# download
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/tomprogers/dockspace/master/src/dockspace.sh)"
 # make it executable
-$ chmod ugo+x ~/scripts/dockspace
+$ chmod ugo+x ./dockspace.sh
 ```
+
+You can source the file to register the `dockspace` function, or invoke it by file path.
+
 
 2. Install dependencies
 
@@ -28,6 +31,8 @@ $ brew install jq librsvg
 ```
 
 For the curious: the Mac-specific tools are all related to setting file icons, which are stored in Mac's resource fork. The main ones are `DeRez`, `Rez`, `SetFile`, and `sips`.
+
+Future versions of dockspace will be published via homebrew, and will install these dependencies for you.
 
 
 ## How to use it
@@ -72,13 +77,27 @@ dockspace doesn't add the shortcuts to the MacOS Dock automatically. (Future ver
     - Right-click on it in the Dock, and choose "Folder" in the "Display As" section.
     - I also recommend sorting by Name so that the location of each item in the list is stable over time.
 3. You can change the icon of the Dock folder, too:
-    1. I recommend doing this *after* adding the folder has been added to the dock, otherwise the custom icon appears in the directory listing.
-    1. Use Preview to open an image you want to use as the icon.
+    1. I recommend doing this *after* adding the shortcuts folder to the dock, otherwise the custom icon file appears in the directory listing.
+    2. Use Preview to open an image you want to use as the icon.
         - The image must be a raster graphic (i.e. *not* an SVG). Although, you *did* just install `librsvg`, which converts SVGs to rasters. (See below for instructions.)
         - Don't use the spacebar, which opens using QuickLook. Instead, double-click the image, or right-click and Open With > Preview.app
-    2. In Preview, copy the entire image content by pressing `Cmd+A`, `Cmd+C`
-    3. In Finder (i.e. *not* the Dock), use "Get Info" on your shortcuts folder (`Cmd+I`, or right-click and "Get Info").
-    4. In the info panel that appears, click on the icon in the upper-left corner, then _paste_ the copied image by pressing `Cmd+V`.
+    3. In Preview, copy the entire image content by pressing `Cmd+A`, `Cmd+C`
+    4. In Finder (i.e. *not* the Dock), use "Get Info" on your shortcuts folder (`Cmd+I`, or right-click and "Get Info").
+    5. In the info panel that appears, click on the icon in the upper-left corner, then _paste_ the copied image by pressing `Cmd+V`.
 
 
 ### Customizing the workspace icon
+
+dockspace will read color information from your `.code-workspace` files, which it will then inject into the shortcut icon. (That's why it needs an SVG icon. Future versions will just skip this step if you use a raster image.)
+
+Right now it can inject one color, as a `fill`, on any element in the SVG that has `id="peacock.color"`. (Future versions will use something better than `id`, but will probably still only set `fill`, so make sure to expand those strokes if you want their color to reflect workspace settings.)
+
+dockspace was originally designed to work with the excellent VS Code [**Peacock**](https://github.com/johnpapa/vscode-peacock) plugin. So, it currently looks for the `peacock.color` setting in workspace files. (Future versions will read from `workbench.colorCustomizations`, which is not specific to Peacock.)
+
+You also probably want a transparent background. You can accomplish that by creating a rectangle the full size of the icon with `fill="none"`, like so:
+
+```xml
+<rect x="0" y="0" width="512" height="512" fill="none" stroke="none" />
+```
+
+Even though this is not standard behavior, I think most SVG editors these days will produce SVGs like this, and `librsvg` was chosen in large part because it supports this non-standard feature.
