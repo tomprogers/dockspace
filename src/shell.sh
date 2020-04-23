@@ -16,6 +16,7 @@ function dockify() {
   echo "reading files from ${sourceDir}"
   echo "using icon ${iconSvgPath}"
   echo "writing files to ${outputDir}"
+  echo "temporary directory is ${TMPDIR}"
 
   local vscw="" # path to workspace file
   for vscw in $(find "${sourceDir}" -iname "*.code-workspace")
@@ -45,6 +46,29 @@ function dockify() {
     # write new SVG to temp file
     local mySvgPath="${TMPDIR}${projectName}.svg"
     echo "${newSvg}" > "${mySvgPath}"
+
+    # step 3: use the svg as the icon for the code-workspace file
+
+    # convert svg to png
+    local myPngPath="${TMPDIR}${projectName}.png"
+    rsvg-convert -w 512 ${mySvgPath} > ${myPngPath}
+
+    # make the image its own icon
+    sips -i ${myPngPath}
+
+    # extract icon as resource file
+    local myRsrcPath="${TMPDIR}${projectName}.rsrc"
+    DeRez -only icns ${myPngPath} > ${myRsrcPath}
+
+    # append new resource to the workspace file
+    Rez -append ${myRsrcPath} -o ${vscw}
+
+    # set icon
+    SetFile -a C ${vscw}
+
+    # step 4: create symlink to workspace file in output directory
+    local mySymlinkPath="${outputDir}/${projectName}"
+    ln -sfn ${vscw} ${mySymlinkPath}
   done
 }
 
