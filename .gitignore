@@ -1,6 +1,7 @@
 .vscode
 *.log
 .DS_Store
+node_modules
 # test assets
 icon.svg
 test.vscw
