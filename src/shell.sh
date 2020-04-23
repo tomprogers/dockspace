@@ -69,6 +69,14 @@ function dockify() {
     # step 4: create symlink to workspace file in output directory
     local mySymlinkPath="${outputDir}/${projectName}"
     ln -sfn ${vscw} ${mySymlinkPath}
+
+
+    # step 5: cleanup
+
+    # delete temp files
+    rm "${mySvgPath}"
+    rm "${myPngPath}"
+    rm "${myRsrcPath}"
   done
 }
 
