@@ -14,7 +14,7 @@ $ dockspace workspaces_directory svg_icon shortcuts_directory
 
 ```sh
 # download
-$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/tomprogers/dockspace/master/src/dockspace.sh)"
+$ curl -fsSL https://raw.githubusercontent.com/tomprogers/dockspace/master/src/dockspace.sh > ./dockspace.sh
 # make it executable
 $ chmod ugo+x ./dockspace.sh
 ```
