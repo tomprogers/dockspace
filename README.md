@@ -124,3 +124,9 @@ It supports lots of options, so see the man page for more info:
 ```sh
 $ man rsvg-convert
 ```
+
+## Caveats
+
+- dockspace currently folds all shortcut names to lowercase, to compensate for my own situation; future versionsn will preserve the lettercase of the original workspace files
+- dockspace shortcuts are traditional symlinks; that means you shouldn't discard your `.code-workspace` files after running dockspace; it also means dockspace actually modifies your workspace files by injecting the icon into each file's resource fork; I don't know if running dockspace repeating on the same workspace file will cause it to bloat up with multiple copies of the same icon; it also means your shortcuts won't work if you disconnect the filesystem that houses the workspace files
+- dockspace only works on MacOS, and I don't have plans to change that
