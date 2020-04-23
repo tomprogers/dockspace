@@ -2,6 +2,8 @@
 
 A MacOS tool that creates custom shortcuts for all your VS Code workspaces.
 
+![Preview of dockspace shortcuts](docs/preview.png)
+
 ```sh
 $ dockspace workspaces_directory svg_icon shortcuts_directory
 ```
@@ -76,14 +78,18 @@ dockspace doesn't add the shortcuts to the MacOS Dock automatically. (Future ver
 2. I think the Dock folder looks best as a single icon rather than a stack:
     - Right-click on it in the Dock, and choose "Folder" in the "Display As" section.
     - I also recommend sorting by Name so that the location of each item in the list is stable over time.
-3. You can change the icon of the Dock folder, too:
-    1. I recommend doing this *after* adding the shortcuts folder to the dock, otherwise the custom icon file appears in the directory listing.
-    2. Use Preview to open an image you want to use as the icon.
-        - The image must be a raster graphic (i.e. *not* an SVG). Although, you *did* just install `librsvg`, which converts SVGs to rasters. (See below for instructions.)
-        - Don't use the spacebar, which opens using QuickLook. Instead, double-click the image, or right-click and Open With > Preview.app
-    3. In Preview, copy the entire image content by pressing `Cmd+A`, `Cmd+C`
-    4. In Finder (i.e. *not* the Dock), use "Get Info" on your shortcuts folder (`Cmd+I`, or right-click and "Get Info").
-    5. In the info panel that appears, click on the icon in the upper-left corner, then _paste_ the copied image by pressing `Cmd+V`.
+
+![Screenshot of reasonable configuration for Dock folder](docs/dock-configuration.png)
+
+You can change the icon of the Dock folder, too:
+
+  1. I recommend doing this *after* adding the shortcuts folder to the dock, otherwise the custom icon file appears in the directory listing.
+  2. Use Preview to open an image you want to use as the icon.
+      - The image must be a raster graphic (i.e. *not* an SVG). Although, you *did* just install `librsvg`, which converts SVGs to rasters. (See below for instructions.)
+      - Don't use the spacebar, which opens using QuickLook. Instead, double-click the image, or right-click and "Open With" > Preview.app
+  3. In Preview, copy the entire image content by pressing `Cmd+A`, `Cmd+C`
+  4. In Finder (i.e. *not* the Dock), use "Get Info" on your shortcuts folder (`Cmd+I`, or right-click and "Get Info").
+  5. In the info panel that appears, click on the icon in the upper-left corner, then _paste_ the copied image data by pressing `Cmd+V`.
 
 
 ### Customizing the workspace icon
@@ -94,10 +100,27 @@ Right now it can inject one color, as a `fill`, on any element in the SVG that h
 
 dockspace was originally designed to work with the excellent VS Code [**Peacock**](https://github.com/johnpapa/vscode-peacock) plugin. So, it currently looks for the `peacock.color` setting in workspace files. (Future versions will read from `workbench.colorCustomizations`, which is not specific to Peacock.)
 
-You also probably want a transparent background. You can accomplish that by creating a rectangle the full size of the icon with `fill="none"`, like so:
+You also probably want a transparent background. You can accomplish that by creating a rectangle as the first element, whose dimensions are the same as the viewbox, with `fill="none"`, like so:
 
 ```xml
 <rect x="0" y="0" width="512" height="512" fill="none" stroke="none" />
 ```
 
 Even though this is not standard behavior, I think most SVG editors these days will produce SVGs like this, and `librsvg` was chosen in large part because it supports this non-standard feature.
+
+
+## How to convert an SVG to a raster
+
+You can use `librsvg` from the command line to convert an SVG to a raster. (That's what dockspace does!)
+
+Here's an example:
+
+```sh
+$ rsvg-convert -w 512 ./icon.svg > ./icon.png # exports at 512px wide, maintaining original aspect ratio
+```
+
+It supports lots of options, so see the man page for more info:
+
+```sh
+$ man rsvg-convert
+```
