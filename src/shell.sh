@@ -67,7 +67,8 @@ function dockify() {
     SetFile -a C ${vscw}
 
     # step 4: create symlink to workspace file in output directory
-    local mySymlinkPath="${outputDir}/${projectName}"
+    local projectNameLowercase="$(echo "${projectName}" | tr '[:upper:]' '[:lower:]')"
+    local mySymlinkPath="${outputDir}/${projectNameLowercase}"
     ln -sfn ${vscw} ${mySymlinkPath}
 
 
